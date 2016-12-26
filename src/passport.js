@@ -1,6 +1,6 @@
 // Importing Passport, strategies, and config
 import passport from 'passport';
-import User from './User';
+import { User } from '@halee9/datamodels';
 import config from 'config';
 if (!config.secret) config.secret = "super secret";
 

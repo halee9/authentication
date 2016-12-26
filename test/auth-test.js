@@ -7,7 +7,7 @@ let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../server');
 
-import User from '../src/User';
+import { User } from '@halee9/datamodels';
 
 let should = chai.should();
 chai.use(chaiHttp);

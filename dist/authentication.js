@@ -8,9 +8,7 @@ var _crypto = require('crypto');
 
 var _crypto2 = _interopRequireDefault(_crypto);
 
-var _User = require('./User');
-
-var _User2 = _interopRequireDefault(_User);
+var _datamodels = require('@halee9/datamodels');
 
 var _config = require('config');
 
@@ -68,7 +66,7 @@ exports.register = function (req, res, next) {
     return res.status(422).send({ error: 'You must enter a password.' });
   }
 
-  _User2.default.findOne({ email: email }, function (err, existingUser) {
+  _datamodels.User.findOne({ email: email }, function (err, existingUser) {
     if (err) {
       return next(err);
     }
@@ -79,7 +77,7 @@ exports.register = function (req, res, next) {
     }
 
     // If email is unique and password was provided, create account
-    var user = new _User2.default({
+    var user = new _datamodels.User({
       email: email,
       password: password,
       profile: { firstName: firstName, lastName: lastName }
@@ -107,7 +105,7 @@ exports.roleAuthorization = function (role) {
   return function (req, res, next) {
     var user = req.user;
 
-    _User2.default.findById(user._id, function (err, foundUser) {
+    _datamodels.User.findById(user._id, function (err, foundUser) {
       if (err) {
         res.status(422).json({ error: 'No user was found.' });
         return next(err);
@@ -131,7 +129,7 @@ exports.roleAuthorization = function (role) {
 exports.forgotPassword = function (req, res, next) {
   var email = req.body.email;
 
-  _User2.default.findOne({ email: email }, function (err, existingUser) {
+  _datamodels.User.findOne({ email: email }, function (err, existingUser) {
     // If user is not found, return error
     if (err || existingUser == null) {
       res.status(422).json({ error: 'Your request could not be processed as entered. Please try again.' });
@@ -175,7 +173,7 @@ exports.forgotPassword = function (req, res, next) {
 //= =======================================
 
 exports.verifyToken = function (req, res, next) {
-  _User2.default.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function (err, resetUser) {
+  _datamodels.User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function (err, resetUser) {
     // If query returned no results, token expired or was invalid. Return error.
     if (!resetUser) {
       res.status(422).json({ error: 'Your token has expired. Please attempt to reset your password again.' });

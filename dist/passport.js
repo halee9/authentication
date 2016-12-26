@@ -4,9 +4,7 @@ var _passport = require('passport');
 
 var _passport2 = _interopRequireDefault(_passport);
 
-var _User = require('./User');
-
-var _User2 = _interopRequireDefault(_User);
+var _datamodels = require('@halee9/datamodels');
 
 var _config = require('config');
 
@@ -28,7 +26,7 @@ var localOptions = { usernameField: 'email' };
 
 // Setting up local login strategy
 var localLogin = new _passportLocal2.default(localOptions, function (email, password, done) {
-  _User2.default.findOne({ email: email }, function (err, user) {
+  _datamodels.User.findOne({ email: email }, function (err, user) {
     if (err) {
       return done(err);
     }
@@ -56,7 +54,7 @@ var jwtOptions = {
 
 // Setting up JWT login strategy
 var jwtLogin = new _passportJwt.Strategy(jwtOptions, function (payload, done) {
-  _User2.default.findById(payload._id, function (err, user) {
+  _datamodels.User.findById(payload._id, function (err, user) {
     if (err) {
       return done(err, false);
     }
